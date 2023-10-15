@@ -1,4 +1,5 @@
 CC=arm-none-eabi-gcc
+OBJCOPY=arm-none-eabi-objcopy
 
 CFLAGS += -std=c99
 CFLAGS += -Og
@@ -9,7 +10,7 @@ CFLAGS += -Wall -Wextra
 LDFLAGS += -nostdlib
 
 .PHONY: all
-all: main.elf
+all: main.bin
 
 OBJECTS=main.o
 
@@ -19,8 +20,11 @@ OBJECTS=main.o
 %.elf: main.o
 	$(CC) -Tlink.ld $(LDFLAGS) $< -o $@
 
+%.bin: %.elf
+	$(OBJCOPY) -O binary $< $@
+
 .PHONY: clean
 clean:
-	rm -f $(OBJECTS) main.elf
+	rm -f $(OBJECTS) main.elf main.bin
 
 .PRECIOUS: $(OBJECTS) main.elf
