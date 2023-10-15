@@ -5,7 +5,7 @@ MEMORY {
 SECTIONS {
     .text : {
         *(.vector_table)
-        *(.text)
+        *(.text*)
     } > flash
 }
 stack_start = ORIGIN(ram) + LENGTH(ram);
