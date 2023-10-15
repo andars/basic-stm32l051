@@ -3,6 +3,9 @@
 #define RCC_BASE 0x40021000
 #define RCC_IOPENR 0x2C
 
+#define GPIO_BASE_A 0x50000000
+#define GPIO_MODER 0x00
+
 void gpio_init() {
     // Reset & clock control, GPIO clock enable register
     volatile uint32_t *rcc_iopenr = (volatile uint32_t *)(RCC_BASE + RCC_IOPENR);
@@ -13,6 +16,13 @@ void gpio_init() {
 
 int main() {
     gpio_init();
+
+    // GPIO port A mode register
+    volatile uint32_t *gpio_a_moder = (volatile uint32_t *)(GPIO_BASE_A + GPIO_MODER);
+
+    // configure PA12 as an output
+    uint32_t gpio_a_mode = 0xE9FFFCFF;
+    *gpio_a_moder = gpio_a_mode;
 }
 
 void reset_handler(void) {
