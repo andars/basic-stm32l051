@@ -5,6 +5,7 @@
 
 #define GPIO_BASE_A 0x50000000
 #define GPIO_MODER 0x00
+#define GPIO_BSRR 0x18
 
 void gpio_init() {
     // Reset & clock control, GPIO clock enable register
@@ -23,6 +24,27 @@ int main() {
     // configure PA12 as an output
     uint32_t gpio_a_mode = 0xE9FFFCFF;
     *gpio_a_moder = gpio_a_mode;
+
+    // GPIO port A bit set/reset register
+    volatile uint32_t *gpio_a_bsrr = (volatile uint32_t *)(GPIO_BASE_A + GPIO_BSRR);
+
+    const int iterations_on = 10000;
+    const int iterations_off = 10000;
+
+    // Blink LED on port A 12 on and off
+    while (1) {
+        // Set GPIO PA12
+        *gpio_a_bsrr = (1 << 12);
+        for (int i = 0; i < iterations_on; i++) {
+            __asm__ volatile ("" ::: "memory");
+        }
+
+        // Reset GPIO PA12
+        *gpio_a_bsrr = (1 << 28);
+        for (int i = 0; i < iterations_off; i++) {
+            __asm__ volatile ("" ::: "memory");
+        }
+    }
 }
 
 void reset_handler(void) {
