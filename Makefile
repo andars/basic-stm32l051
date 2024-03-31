@@ -31,4 +31,8 @@ OBJECTS=main.o
 clean:
 	rm -f $(OBJECTS) main.elf main.bin
 
+.PHONY: flash
+flash: main.bin
+	st-flash --connect-under-reset write ./main.bin 0x8000000
+
 .PRECIOUS: $(OBJECTS) main.elf
