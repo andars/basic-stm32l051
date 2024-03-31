@@ -1,6 +1,8 @@
 #include <stdint.h>
 
 #define RCC_BASE 0x40021000
+#define RCC_CR 0x00
+#define RCC_CFGR 0x0C
 #define RCC_IOPENR 0x2C
 
 #define GPIO_BASE_A 0x50000000
@@ -18,6 +20,14 @@ void gpio_init() {
 int main() {
     gpio_init();
 
+    // Set HSI16ON to enable the 16 MHz internal clock
+    volatile uint32_t *rcc_cr = (volatile uint32_t *)(RCC_BASE + RCC_CR);
+    *rcc_cr = *rcc_cr | 0x1;
+
+    // Update CFGR.SW to switch SYSCLK from 2 MHz MSI to 16 MHz HSI
+    volatile uint32_t *rcc_cfgr = (volatile uint32_t *)(RCC_BASE + RCC_CFGR);
+    *rcc_cfgr = 0x01;
+
     // GPIO port A mode register
     volatile uint32_t *gpio_a_moder = (volatile uint32_t *)(GPIO_BASE_A + GPIO_MODER);
 
@@ -28,8 +38,8 @@ int main() {
     // GPIO port A bit set/reset register
     volatile uint32_t *gpio_a_bsrr = (volatile uint32_t *)(GPIO_BASE_A + GPIO_BSRR);
 
-    const int iterations_on = 10000;
-    const int iterations_off = 10000;
+    const int iterations_on = 100000;
+    const int iterations_off = 100000;
 
     // Blink LED on port A 12 on and off
     while (1) {
