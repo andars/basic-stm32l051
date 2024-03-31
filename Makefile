@@ -8,6 +8,8 @@ CFLAGS += -mcpu=cortex-m0plus
 CFLAGS += -Wall -Wextra
 
 LDFLAGS += -nostdlib
+LDFLAGS += -Xlinker --print-memory-usage
+LDFLAGS += -Xlinker --print-map
 
 .PHONY: all
 all: main.bin
