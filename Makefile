@@ -20,7 +20,7 @@ OBJECTS=main.o
 %.o: %.c
 	$(CC) -c $< $(CFLAGS) -o $@
 
-%.elf: main.o
+%.elf: main.o link.ld
 	$(CC) -Tlink.ld $(LDFLAGS) $< -o $@
 
 %.bin: %.elf
