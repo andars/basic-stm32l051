@@ -4,6 +4,7 @@ OBJCOPY=arm-none-eabi-objcopy
 CFLAGS += -std=c99
 CFLAGS += -Og
 CFLAGS += -g
+CFLAGS += -fno-common
 CFLAGS += -mcpu=cortex-m0plus
 CFLAGS += -Wall -Wextra
 CFLAGS += -ffreestanding

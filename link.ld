@@ -7,5 +7,11 @@ SECTIONS {
         *(.vector_table)
         *(.text*)
     } > flash
+    .bss : {
+        bss_vma = .;
+        *(.bss)
+        *(COMMON)
+        bss_vma_end = .;
+    } > ram
 }
 stack_start = ORIGIN(ram) + LENGTH(ram);

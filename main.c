@@ -9,6 +9,13 @@
 #define GPIO_MODER 0x00
 #define GPIO_BSRR 0x18
 
+// Sample variables for .bss.
+// zero_initialized_char will be in the input .bss section.
+// unininitialized_char will be a common symbol unless using -fno-common,
+// in which case it will also be in the input .bss section.
+char zero_initialized_char = 0;
+char uninitialized_char;
+
 void gpio_init() {
     // Reset & clock control, GPIO clock enable register
     volatile uint32_t *rcc_iopenr = (volatile uint32_t *)(RCC_BASE + RCC_IOPENR);
@@ -57,7 +64,16 @@ int main() {
     }
 }
 
+// Symbols defined by the linker script for .bss start and end
+extern char bss_vma, bss_vma_end;
+
 void reset_handler(void) {
+    // Zero-initialize .bss
+    char *dst = &bss_vma;
+    while (dst < &bss_vma_end) {
+        *dst++ = 0;
+    }
+
     main();
 }
 
