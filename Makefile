@@ -6,6 +6,7 @@ CFLAGS += -Og
 CFLAGS += -g
 CFLAGS += -mcpu=cortex-m0plus
 CFLAGS += -Wall -Wextra
+CFLAGS += -ffreestanding
 
 LDFLAGS += -nostdlib
 LDFLAGS += -Xlinker --print-memory-usage
